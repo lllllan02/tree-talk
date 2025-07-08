@@ -1,6 +1,6 @@
 import React from "react";
 import { Layout } from "antd";
-import ConversationTree from "./ConversationTree";
+import ConversationList from "./ConversationList";
 
 const { Sider } = Layout;
 
@@ -13,7 +13,7 @@ const AppSidebar: React.FC = () => {
         borderRight: "1px solid #f0f0f0",
       }}
     >
-      <ConversationTree />
+      <ConversationList />
     </Sider>
   );
 };

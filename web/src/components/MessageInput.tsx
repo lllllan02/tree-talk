@@ -9,17 +9,17 @@ const { TextArea } = Input;
 const MessageInput: React.FC = () => {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const currentBranch = useSelector((state: RootState) => state.conversation.currentBranch);
+  const currentConversation = useSelector((state: RootState) => state.conversation.currentConversation);
 
   const handleSend = async () => {
-    if (!message.trim() || !currentBranch) return;
+    if (!message.trim() || !currentConversation) return;
 
     setLoading(true);
     
     // 模拟发送消息
     setTimeout(() => {
       console.log('发送消息:', message);
-      console.log('当前分支:', currentBranch.name);
+      console.log('当前对话:', currentConversation.title);
       setMessage('');
       setLoading(false);
     }, 1000);
@@ -32,11 +32,11 @@ const MessageInput: React.FC = () => {
     }
   };
 
-  if (!currentBranch) {
+  if (!currentConversation) {
     return (
       <Card style={{ margin: '16px' }}>
         <div style={{ textAlign: 'center', color: '#999' }}>
-          请先选择一个对话分支
+          请先选择一个对话
         </div>
       </Card>
     );
