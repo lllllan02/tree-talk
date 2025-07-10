@@ -4,7 +4,12 @@ import ConversationList from "./ConversationList";
 
 const { Sider } = Layout;
 
-const AppSidebar: React.FC = () => {
+interface AppSidebarProps {
+  showBranchPanel: boolean;
+  setShowBranchPanel: (show: boolean) => void;
+}
+
+const AppSidebar: React.FC<AppSidebarProps> = ({ showBranchPanel, setShowBranchPanel }) => {
   return (
     <Sider
       width={300}
@@ -13,7 +18,7 @@ const AppSidebar: React.FC = () => {
         borderRight: "1px solid #f0f0f0",
       }}
     >
-      <ConversationList />
+      <ConversationList showBranchPanel={showBranchPanel} setShowBranchPanel={setShowBranchPanel} />
     </Sider>
   );
 };
