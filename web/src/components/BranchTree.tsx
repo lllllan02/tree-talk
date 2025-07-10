@@ -1,36 +1,70 @@
 import React from 'react';
-import { Tree, Typography } from 'antd';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { Message } from '../types';
+import TreeHeader from './TreeHeader';
+import GenealogyNode from './GenealogyNode';
+import CanvasWrapper from './CanvasWrapper';
 
-const { Title } = Typography;
-
-// 递归将用户消息树转为 Tree 组件数据
-function buildUserTree(messages: Message[]): any[] {
-  return messages
-    .filter(msg => msg.sender === 'user')
-    .map(msg => ({
-      key: msg.id,
-      title: msg.content,
-      children: msg.children ? buildUserTree(msg.children) : undefined,
-    }));
+// 递归配对：每个节点为“用户+AI”一组，children为该组下的所有分支（每个分支也是一组）
+function pairMessages(messages: Message[]): any[] {
+  const pairs: any[] = [];
+  for (const msg of messages) {
+    if (msg.sender === 'user') {
+      // 找到user的第一个ai子回复
+      const aiReply = (msg.children || []).find(child => child.sender === 'ai');
+      pairs.push({
+        user: msg,
+        ai: aiReply || null,
+        children: aiReply
+          ? pairMessages(aiReply.children || [])
+          : pairMessages((msg.children || []).filter(child => child !== aiReply)),
+      });
+    }
+  }
+  return pairs;
 }
+
+const styles = {
+  genealogyRoot: {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignItems: 'center',
+    width: '100%',
+  },
+};
 
 const BranchTree: React.FC = () => {
   const currentConversation = useSelector((state: RootState) => state.conversation.currentConversation);
+
   if (!currentConversation) {
-    return <div style={{ padding: 24, textAlign: 'center', color: '#888' }}>暂无对话</div>;
+    return (
+      <div style={{ 
+        padding: 24, 
+        textAlign: 'center', 
+        color: '#888',
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        暂无对话
+      </div>
+    );
   }
-  const treeData = buildUserTree(currentConversation.messages);
+
+  const pairedData = pairMessages(currentConversation.messages);
+
   return (
-    <div style={{ padding: 24, height: '100%', overflow: 'auto' }}>
-      <Title level={5}>用户提问分支</Title>
-      <Tree
-        treeData={treeData}
-        defaultExpandAll
-        showLine
-      />
+    <div style={{ width: '100%', padding: 24, boxSizing: 'border-box' }}>
+      <TreeHeader title={currentConversation.title} />
+      <CanvasWrapper>
+        <div style={styles.genealogyRoot}>
+          {pairedData.map((node, idx) => (
+            <GenealogyNode node={node} key={idx} />
+          ))}
+        </div>
+      </CanvasWrapper>
     </div>
   );
 };

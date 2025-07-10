@@ -57,6 +57,48 @@ export const mockMessages: Message[] = [
     parentId: '7',
     createdAt: '2024-01-01T10:07:00Z',
   },
+  {
+    id: '11',
+    content: '人工智能有哪些应用？',
+    sender: 'user',
+    parentId: '2',
+    createdAt: '2024-01-01T10:08:00Z',
+  },
+  {
+    id: '12',
+    content: '人工智能应用于医疗、金融、自动驾驶、智能家居等多个领域。',
+    sender: 'ai',
+    parentId: '11',
+    createdAt: '2024-01-01T10:09:00Z',
+  },
+  {
+    id: '13',
+    content: 'AI和人类的区别是什么？',
+    sender: 'user',
+    parentId: '2',
+    createdAt: '2024-01-01T10:10:00Z',
+  },
+  {
+    id: '14',
+    content: 'AI没有自我意识，依赖数据和算法进行推理，而人类有主观能动性和情感。',
+    sender: 'ai',
+    parentId: '13',
+    createdAt: '2024-01-01T10:11:00Z',
+  },
+  {
+    id: '15',
+    content: '机器学习和深度学习的区别是什么？',
+    sender: 'user',
+    parentId: '6',
+    createdAt: '2024-01-01T10:12:00Z',
+  },
+  {
+    id: '16',
+    content: '深度学习是机器学习的一个子集，主要使用神经网络进行复杂任务。',
+    sender: 'ai',
+    parentId: '15',
+    createdAt: '2024-01-01T10:13:00Z',
+  },
 ];
 
 // 构建树形结构
